@@ -1,42 +1,43 @@
-name: 'Cloudflare Management'
-description: 'Check, create, or delete a DNS record on Cloudflare'
+name: 'Manage DNS Record'
+description: 'Validate, create, update, or delete a DNS record using the Cloudflare API'
 inputs:
-  action:
-    description: 'Action to perform (check, create, delete)'
+  auth-token:
+    description: 'Cloudflare API token'
     required: true
   zone-id:
-    description: 'Cloudflare Zone ID'
-    required: true
-  auth-token:
-    description: 'Cloudflare Auth Token'
-    required: true
-  record-name:
-    description: 'DNS record name'
-    required: true
-  record-content:
-    description: 'DNS record content'
+    description: 'DNS zone ID'
     required: true
   record-type:
-    description: 'DNS record type'
+    description: 'Type of the DNS record'
+    required: true
+  record-name:
+    description: 'Name of the DNS record'
+    required: true
+  record-content:
+    description: 'Content of the DNS record'
+    required: true
+  action:
+    description: 'Action to perform on the DNS record'
     required: true
   create-if-not-exists:
-    description: 'Should the record be created if it does not exist?'
+    description: 'If true, create the record if it does not exist when validating'
+    required: false
+    default: 'false'
+  ttl:
+    description: 'Time to live for DNS record'
+    required: false
+    default: '1'
+  comment:
+    description: 'Comment for DNS record'
+    required: false
+  proxied:
+    description: 'If true, DNS record will be proxied through Cloudflare'
     required: false
     default: 'false'
 runs:
   using: "composite"
   steps:
-    - id: 'set-env-vars'
+    - run: chmod +x run.sh
       shell: bash
-      run: |
-        echo "ZONE_ID=${{ inputs.zone-id }}" >> $GITHUB_ENV
-        echo "AUTH_TOKEN=${{ inputs.auth-token }}" >> $GITHUB_ENV
-        echo "RECORD_NAME=${{ inputs.record-name }}" >> $GITHUB_ENV
-        echo "RECORD_CONTENT=${{ inputs.record-content }}" >> $GITHUB_ENV
-        echo "RECORD_TYPE=${{ inputs.record-type }}" >> $GITHUB_ENV
-        echo "CREATE_IF_NOT_EXISTS=${{ inputs.create-if-not-exists }}" >> $GITHUB_ENV
-        echo "ACTION=${{ inputs.action }}" >> $GITHUB_ENV
-    - id: 'manage-record'
+    - run: ./run.sh "${{ inputs.auth-token }}" "${{ inputs.zone-id }}" "${{ inputs.record-type }}" "${{ inputs.record-name }}" "${{ inputs.record-content }}" "${{ inputs.action }}" "${{ inputs.create-if-not-exists }}" "${{ inputs.ttl }}" "${{ inputs.comment }}" "${{ inputs.proxied }}"
       shell: bash
-      run: |
-        bash ./run.sh
