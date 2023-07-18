@@ -1,0 +1,42 @@
+name: 'Cloudflare Management'
+description: 'Check, create, or delete a DNS record on Cloudflare'
+inputs:
+  action:
+    description: 'Action to perform (check, create, delete)'
+    required: true
+  zone-id:
+    description: 'Cloudflare Zone ID'
+    required: true
+  auth-token:
+    description: 'Cloudflare Auth Token'
+    required: true
+  record-name:
+    description: 'DNS record name'
+    required: true
+  record-content:
+    description: 'DNS record content'
+    required: true
+  record-type:
+    description: 'DNS record type'
+    required: true
+  create-if-not-exists:
+    description: 'Should the record be created if it does not exist?'
+    required: false
+    default: 'false'
+runs:
+  using: "composite"
+  steps:
+    - id: 'set-env-vars'
+      shell: bash
+      run: |
+        echo "ZONE_ID=${{ inputs.zone-id }}" >> $GITHUB_ENV
+        echo "AUTH_TOKEN=${{ inputs.auth-token }}" >> $GITHUB_ENV
+        echo "RECORD_NAME=${{ inputs.record-name }}" >> $GITHUB_ENV
+        echo "RECORD_CONTENT=${{ inputs.record-content }}" >> $GITHUB_ENV
+        echo "RECORD_TYPE=${{ inputs.record-type }}" >> $GITHUB_ENV
+        echo "CREATE_IF_NOT_EXISTS=${{ inputs.create-if-not-exists }}" >> $GITHUB_ENV
+        echo "ACTION=${{ inputs.action }}" >> $GITHUB_ENV
+    - id: 'manage-record'
+      shell: bash
+      run: |
+        bash ./run.sh
