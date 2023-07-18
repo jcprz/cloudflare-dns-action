@@ -46,7 +46,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: chmod +x run.sh
+    - run: chmod +x ${{ github.action_path }}/main.sh
       shell: bash
-    - run: ./run.sh "${{ inputs.auth-token }}" "${{ inputs.zone-id }}" "${{ inputs.record-type }}" "${{ inputs.record-name }}" "${{ inputs.record-content }}" "${{ inputs.action }}" "${{ inputs.create-if-not-exists }}" "${{ inputs.ttl }}" "${{ inputs.comment }}" "${{ inputs.proxied }}" "${{ inputs.delete-older-than }}" "${{ inputs.delete-regex-match }}" "${{ inputs.dry-run }}"
+    - run: ${{ github.action_path }}/main.sh "${{ inputs.auth-token }}" "${{ inputs.zone-id }}" "${{ inputs.record-type }}" "${{ inputs.record-name }}" "${{ inputs.record-content }}" "${{ inputs.action }}" "${{ inputs.create-if-not-exists }}" "${{ inputs.ttl }}" "${{ inputs.comment }}" "${{ inputs.proxied }}" "${{ inputs.delete-older-than }}" "${{ inputs.delete-regex-match }}" "${{ inputs.dry-run }}"
       shell: bash
