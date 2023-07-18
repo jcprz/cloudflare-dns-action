@@ -100,6 +100,7 @@ if [[ $action == "delete" ]]; then
     echo "$records"
     exit 0
   fi
+  
   if [[ -z $delete_regex_match ]] || [[ $delete_regex_match == "*" ]]; then
     echo "Refusing to delete all records. Please provide a specific pattern to match."
     exit 1
