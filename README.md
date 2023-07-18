@@ -1,4 +1,4 @@
-# cloudflare-management-action
+# cloudflare-dns-action
 
 This GitHub Action is designed to manage DNS records using the Cloudflare API. You can use it to check if a DNS record exists, create a new DNS record, or delete an existing DNS record.
 
