@@ -68,7 +68,12 @@ if [[ $action == "delete" ]]; then
   record_id=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/${zone_id}/dns_records?type=${record_type}&name=${record_name}" \
       -H "Authorization: Bearer ${auth_token}" \
       -H "Content-Type: application/json" | jq -r '.result[0].id')
-  curl -s -X DELETE "https://api.cloudflare.com/client/v4/zones/${zone_id}/dns_records/${record_id}" \
-    -H "Authorization: Bearer ${auth_token}" \
-    -H "Content-Type: application/json"
+  
+  if [ "$record_id" != "null" ]; then
+    curl -s -X DELETE "https://api.cloudflare.com/client/v4/zones/${zone_id}/dns_records/${record_id}" \
+      -H "Authorization: Bearer ${auth_token}" \
+      -H "Content-Type: application/json"
+  else
+    echo "DNS Record does not exist, nothing to delete"
+  fi
 fi
