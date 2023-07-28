@@ -19,10 +19,6 @@ inputs:
   action:
     description: 'Action to perform on the DNS record'
     required: true
-  create-if-not-exists:
-    description: 'If true, create the record if it does not exist when validating'
-    required: false
-    default: 'false'
   ttl:
     description: 'Time to live for DNS record'
     required: false
@@ -34,19 +30,10 @@ inputs:
     description: 'If true, DNS record will be proxied through Cloudflare'
     required: false
     default: 'false'
-  delete-older-than:
-    description: 'If provided, records older than this time in seconds will be deleted'
-  delete-regex-match:
-    description: 'Delete records that match this regex pattern in record name'
-    required: false
-  dry-run:
-    description: 'If true, prints what would be deleted without actually deleting'
-    required: false
-    default: 'false'
 runs:
   using: "composite"
   steps:
     - run: chmod +x ${{ github.action_path }}/main.sh
       shell: bash
-    - run: ${{ github.action_path }}/main.sh "${{ inputs.auth-token }}" "${{ inputs.zone-id }}" "${{ inputs.record-type }}" "${{ inputs.record-name }}" "${{ inputs.record-content }}" "${{ inputs.action }}" "${{ inputs.create-if-not-exists }}" "${{ inputs.ttl }}" "${{ inputs.comment }}" "${{ inputs.proxied }}" "${{ inputs.delete-older-than }}" "${{ inputs.delete-regex-match }}" "${{ inputs.dry-run }}"
+    - run: ${{ github.action_path }}/main.sh "${{ inputs.auth-token }}" "${{ inputs.zone-id }}" "${{ inputs.record-type }}" "${{ inputs.record-name }}" "${{ inputs.record-content }}" "${{ inputs.action }}" "${{ inputs.ttl }}" "${{ inputs.comment }}" "${{ inputs.proxied }}"
       shell: bash
